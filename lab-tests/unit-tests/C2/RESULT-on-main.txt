@@ -1,6 +1,0 @@
-test_c2_readme.py:26: AssertionError
-=========================== short test summary info ============================
-FAILED test_c2_readme.py::test_readme_has_no_stale_400_proposal - AssertionEr...
-FAILED test_c2_readme.py::test_readme_states_404_and_references_existing_tag
-FAILED test_c2_readme.py::test_readme_mentions_createQosAssignment_pending - ...
-3 failed, 1 passed in 0.01s
