@@ -17,5 +17,5 @@ Feature: Proposed change to createSession 400.9 (excerpt, for upstream discussio
     And the response header "x-correlator" has same value as the request header "x-correlator"
     And the response header "Content-Type" is "application/json"
     And the response property "$.status" is 400
-    And the response property "$.code" is one of "INVALID_ARGUMENT" or "QUALITY_ON_DEMAND.DURATION_OUT_OF_RANGE"
+    And the response property "$.code" is "QUALITY_ON_DEMAND.DURATION_OUT_OF_RANGE" or "INVALID_ARGUMENT"
     And the response property "$.message" contains a user friendly text

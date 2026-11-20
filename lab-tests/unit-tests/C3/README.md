@@ -1,5 +1,6 @@
-# C3 — createSession 400.9 (kode error) — QoD fork issue #1
-Menguji: OAS `CreateSessionBadRequest400` memuat `INVALID_ARGUMENT` dan `QUALITY_ON_DEMAND.DURATION_OUT_OF_RANGE` (+ contoh); feature 400.9 hanya menerima `INVALID_ARGUMENT` (gap, xfail strict); usulan `proposed_400_9.feature` (terima salah satu) valid secara Gherkin dan salinan feature asli yang dipatch satu baris tetap ter-parse.
-Jalankan: `cd C3 && ../.venv/bin/pytest -q -rx` (repo QoD: env `QOD_REPO`, default `../../QualityOnDemand`; file feature/OAS di working tree sama dengan main).
-Hasil di box: **7 passed, 1 xfailed** (`RESULT.txt`); main polos (`/tmp/qodmain`): sama.
-Catatan: step "is one of" bukan step baku CAMARA; proposal masih menunggu preferensi maintainer. Spectral/gherkin-lint upstream tidak dijalankan (tidak terpasang; TODO `npx @stoplight/spectral-cli`, `gherkin-lint` bila diperlukan).
+# C3 — createSession 400.9 (kode error) — QoD fork issue #1 (PR fork #4, branch test/tc-c3)
+Branch ini MENGUBAH `code/Test_definitions/quality-on-demand-createSession.feature` (scenario 400.9): `"$.code" is "QUALITY_ON_DEMAND.DURATION_OUT_OF_RANGE" or "INVALID_ARGUMENT"` (gaya sama seperti 400.5/400.7 di file yang sama) + komentar satu baris.
+Menguji (sekarang normal assert, tanpa xfail): OAS memuat kedua kode + contoh; feature hasil perbaikan menerima keduanya dan kodenya ada di OAS; feature ter-parse (gherkin) dengan tag unik; baseline+1 baris == scenario hasil perbaikan. `test_baseline_*` = baseline-unfixed (informational) memakai `git show origin/main:...`.
+Jalankan: `git fetch --depth 1 origin main` lalu `cd lab-tests/unit-tests/C3 && pytest -q -rA` (pytest, pyyaml, gherkin-official).
+Hasil: lihat `RESULT.txt` — 10 passed. Spectral/gherkin-lint upstream tidak dijalankan (TODO).
+Catatan: ini perubahan di FORK; belum ada PR upstream; preferensi maintainer (opsi 1 atau 2) belum diketahui.

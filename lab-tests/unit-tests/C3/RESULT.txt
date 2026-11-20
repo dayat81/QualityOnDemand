@@ -1,4 +1,13 @@
-....x...                                                                 [100%]
-=========================== short test summary info ============================
-XFAIL test_c3_400_9.py::test_gap_feature_accepts_specific_code - gap: feature does not accept the specific code documented in the OAS (fixed by the proposal)
-7 passed, 1 xfailed in 0.07s
+# C3 unit test result (box, 2026-11-20 15:31 WIB); checkout: a6e0935 (scratch clone mirroring the fork branch contents)
+# cmd: pytest -q -rA
+PASSED test_c3_400_9.py::test_oas_lists_specific_duration_code
+PASSED test_c3_400_9.py::test_oas_still_allows_invalid_argument
+PASSED test_c3_400_9.py::test_oas_has_duration_out_of_range_example
+PASSED test_c3_400_9.py::test_baseline_unfixed_main_pins_single_code
+PASSED test_c3_400_9.py::test_fixed_feature_accepts_specific_and_generic_code
+PASSED test_c3_400_9.py::test_fixed_feature_parses_and_tag_unique
+PASSED test_c3_400_9.py::test_fixed_feature_codes_are_in_oas
+PASSED test_c3_400_9.py::test_proposed_scenario_parses_and_accepts_both
+PASSED test_c3_400_9.py::test_proposed_codes_are_subset_of_oas
+PASSED test_c3_400_9.py::test_baseline_plus_one_line_equals_fixed_scenario
+10 passed in 0.07s
