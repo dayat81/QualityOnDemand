@@ -339,7 +339,8 @@ Feature: CAMARA Quality On Demand API, vwip - Operation createSession
     And the response header "x-correlator" has same value as the request header "x-correlator"
     And the response header "Content-Type" is "application/json"
     And the response property "$.status" is 400
-    And the response property "$.code" is "INVALID_ARGUMENT"
+    # The OAS lists both codes: the specific one is preferred, the generic one is also accepted
+    And the response property "$.code" is "QUALITY_ON_DEMAND.DURATION_OUT_OF_RANGE" or "INVALID_ARGUMENT"
     And the response property "$.message" contains a user friendly text
 
   @quality_on_demand_createSession_400.10_invalid_x-correlator
