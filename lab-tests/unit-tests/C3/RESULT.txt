@@ -1,0 +1,4 @@
+....x...                                                                 [100%]
+=========================== short test summary info ============================
+XFAIL test_c3_400_9.py::test_gap_feature_accepts_specific_code - gap: feature does not accept the specific code documented in the OAS (fixed by the proposal)
+7 passed, 1 xfailed in 0.07s
