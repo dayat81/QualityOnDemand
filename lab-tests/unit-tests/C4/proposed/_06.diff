@@ -1,0 +1,15 @@
+--- fixtures/upstream_954b773_qos-profiles-retrieveQosProfiles.feature	2026-11-20 15:31:17.424828677 +0700
++++ proposed/qos-profiles-retrieveQosProfiles.feature	2026-11-20 15:31:17.432828287 +0700
+@@ -100,8 +100,10 @@
+     And no restricted QoS Profile is included in the response
+ 
+   @qos_profiles_retrieveQosProfiles_06_device_qos_profiles_not_found
+-  Scenario: Device has no QoS profiles associated
+-    Given a device for which the service is not applicable, provided in the request body or identified by the access token
++  Scenario: Eligible device has no QoS profiles associated
++    # Distinct from C01.07: here the service IS applicable to the device, there simply are no profiles associated with it
++    Given a valid device, provided in the request body or identified by the access token, for which the service is applicable
++    And no QoS Profile is associated with that device
+     When the request "retrieveQosProfiles" is sent
+     Then the response status code is 200
+     And the response header "Content-Type" is "application/json"
