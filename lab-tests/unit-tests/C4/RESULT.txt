@@ -1,0 +1,4 @@
+....x....                                                                [100%]
+=========================== short test summary info ============================
+XFAIL test_c4_inconsistency.py::test_gap_preconditions_are_distinguishable_on_main - gap: on main the two device preconditions are distinguishable only by a per-device switch not in the text
+8 passed, 1 xfailed in 0.02s

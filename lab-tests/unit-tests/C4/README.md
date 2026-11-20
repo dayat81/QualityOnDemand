@@ -1,0 +1,4 @@
+# C4 — QoSProfiles `_06` vs `C01.07` — QoD fork issue #3 (target camaraproject/QoSProfiles)
+Menguji (fixture-based, dari `QoSProfiles/code/Test_definitions/qos-profiles-retrieveQosProfiles.feature` @954b773): kedua skenario ada; hasil berbeda (200 `[]` vs 422); prekondisi device identik ("service is not applicable") → tak ada server deterministik yang memenuhi keduanya secara literal; `test_gap_...` (xfail strict) = bukti; `proposed_06_C01_07.feature` memperbaiki dengan "applicable + tidak ada profil" vs "not offered"; `RefServer` (2 flag, seperti fixture adapter lab `service`/`profiles`) memenuhi usulan, server 1-flag tidak.
+Jalankan: `cd C4 && ../.venv/bin/pytest -q -rx` (env `QOSP_REPO` = clone camaraproject/QoSProfiles; fixture feature TIDAK ada di fork QoD — di PR ini tes C4 butuh clone itu).
+Hasil di box: **8 passed, 1 xfailed**.
