@@ -1,0 +1,8 @@
+# C2 unit test result (box, 2026-11-20 15:31 WIB); checkout: 984f80b (scratch clone mirroring the fork branch contents)
+# cmd: pytest -q -rA
+PASSED test_c2_readme.py::test_feature_scenario_exists_and_is_404_not_found
+PASSED test_c2_readme.py::test_readme_has_no_stale_400_proposal
+PASSED test_c2_readme.py::test_readme_states_404_and_references_existing_tag
+PASSED test_c2_readme.py::test_readme_mentions_createQosAssignment_pending
+PASSED test_c2_readme.py::test_baseline_unfixed_main_readme_is_stale
+5 passed in 0.01s
