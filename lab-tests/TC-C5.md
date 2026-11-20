@@ -50,7 +50,7 @@ Status: DRAFT, belum dieksekusi. Bukti eksisting: `/workspace/fase1-closeout/cal
 
 ## Gherkin kandidat (tambahan upstream; nama final menunggu jawaban maintainer)
 ```gherkin
-  @quality_on_demand_createSession_02_3_event_duration_expired
+  @quality_on_demand_createSession_02_4_event_duration_expired
   Scenario: Event is received when the session duration expires
     Given a valid testing device supported by the service, identified by the token or provided in the request body
     And the request body property "$.duration" is set to a valid duration for the selected QoS profile
@@ -69,7 +69,7 @@ Status: DRAFT, belum dieksekusi. Bukti eksisting: `/workspace/fase1-closeout/cal
     And the event body property "$.data.qosStatus" is "UNAVAILABLE"
     And the event body property "$.data.statusInfo" is "DURATION_EXPIRED"
 
-  @quality_on_demand_createSession_02_4_event_network_terminated
+  @quality_on_demand_createSession_02_5_event_network_terminated
   Scenario: Event is received when the network terminates an AVAILABLE session
     Given an existing QoS session created by operation createSession with provided values for "sink" and "sinkCredential", and with status "AVAILABLE"
     When the network terminates the QoS session (implementation-specific trigger)

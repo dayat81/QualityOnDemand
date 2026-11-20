@@ -1,0 +1,5 @@
+....xx.......                                                            [100%]
+=========================== short test summary info ============================
+XFAIL test_c5_events.py::test_gap_duration_expired_scenario_exists - gap: no scenario for DURATION_EXPIRED on main
+XFAIL test_c5_events.py::test_gap_network_terminated_scenario_exists - gap: no scenario for NETWORK_TERMINATED on main
+11 passed, 2 xfailed in 0.10s
