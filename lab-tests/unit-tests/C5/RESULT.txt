@@ -1,5 +1,19 @@
-....xx.......                                                            [100%]
-=========================== short test summary info ============================
-XFAIL test_c5_events.py::test_gap_duration_expired_scenario_exists - gap: no scenario for DURATION_EXPIRED on main
-XFAIL test_c5_events.py::test_gap_network_terminated_scenario_exists - gap: no scenario for NETWORK_TERMINATED on main
-11 passed, 2 xfailed in 0.10s
+# C5 unit test result (box, 2026-11-20 15:31 WIB); checkout: 058c4fb (scratch clone mirroring the fork branch contents)
+# cmd: pytest -q -rA
+PASSED test_c5_events.py::test_oas_statusinfo_enum
+PASSED test_c5_events.py::test_event_schema_requires_sessionid_and_qosstatus
+PASSED test_c5_events.py::test_examples_exist_for_both_events
+PASSED test_c5_events.py::test_baseline_unfixed_main_covers_only_delete_requested
+PASSED test_c5_events.py::test_fixed_all_statusinfo_values_covered_by_features
+PASSED test_c5_events.py::test_fixed_duration_expired_scenario_in_real_feature
+PASSED test_c5_events.py::test_fixed_network_terminated_scenario_in_real_feature
+PASSED test_c5_events.py::test_fixed_real_feature_parses_and_tags_unique
+PASSED test_c5_events.py::test_fixed_new_scenarios_do_not_touch_existing_ones
+PASSED test_c5_events.py::test_proposed_feature_parses_and_covers_gap
+PASSED test_c5_events.py::test_proposed_tags_do_not_collide_with_baseline_main
+PASSED test_c5_events.py::test_proposed_tags_follow_naming_pattern
+PASSED test_c5_events.py::test_sample_event_validates_against_data_schema[DURATION_EXPIRED]
+PASSED test_c5_events.py::test_sample_event_validates_against_data_schema[NETWORK_TERMINATED]
+PASSED test_c5_events.py::test_sample_event_validates_against_data_schema[DELETE_REQUESTED]
+PASSED test_c5_events.py::test_negative_unknown_statusinfo_rejected
+16 passed in 0.13s

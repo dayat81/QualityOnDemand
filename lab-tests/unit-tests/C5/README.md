@@ -1,4 +1,5 @@
-# C5 — scenario event DURATION_EXPIRED / NETWORK_TERMINATED — QoD fork issue #2
-Menguji: enum `StatusInfo`, schema `EventQosStatusChanged`, contoh OAS; fitur main hanya mencakup `DELETE_REQUESTED` (2 xfail strict = gap); `proposed_events.feature` valid Gherkin, tag tidak bentrok dan sesuai pola penamaan (`02_4`, `02_5` karena `02_3` sudah ada); contoh CloudEvent (bentuk dari lab adapter) lolos validasi schema data; negatif: statusInfo tak dikenal ditolak.
-Jalankan: `cd C5 && ../.venv/bin/pytest -q -rx`.
-Hasil di box: **11 passed, 2 xfailed**. Step "the session duration elapses" / "the network terminates..." belum didefinisikan di tooling manapun (TODO, implementasi-spesifik). Pengiriman event nyata diuji di lab (TC-C5), bukan di sini.
+# C5 — scenario event DURATION_EXPIRED / NETWORK_TERMINATED — QoD fork issue #2 (PR fork #5, branch test/tc-c5)
+Branch ini MENAMBAH dua scenario ke `code/Test_definitions/quality-on-demand-createSession.feature`: `@quality_on_demand_createSession_02_4_event_duration_expired` dan `@..._02_5_event_network_terminated` (02_3 sudah dipakai upstream untuk private_key_jwt).
+Menguji (normal assert, tanpa xfail): enum StatusInfo, schema event, contoh OAS; feature asli kini mencakup ketiga statusInfo; scenario baru ada dengan assert yang benar; feature ter-parse, tag unik, scenario lama tidak berubah (+2 scenario); `proposed_events.feature` valid; contoh CloudEvent lolos schema; negatif: statusInfo tak dikenal ditolak. `test_baseline_*` = baseline-unfixed (informational) via `git show origin/main:...`.
+Jalankan: `git fetch --depth 1 origin main` lalu `cd lab-tests/unit-tests/C5 && pytest -q -rA`.
+Hasil: lihat `RESULT.txt` — 16 passed. Step "the session duration elapses" / "the network terminates..." belum didefinisikan di tooling manapun (TODO, implementasi-spesifik); verifikasi event nyata ada di lab (TC-C5).

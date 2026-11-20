@@ -1,8 +1,9 @@
-"""C5: OAS defines DURATION_EXPIRED / NETWORK_TERMINATED statusInfo but no feature scenario checks them.
-Tests marked 'gap' are EXPECTED TO FAIL on unfixed main (strict xfail)."""
+"""C5: OAS defines DURATION_EXPIRED / NETWORK_TERMINATED statusInfo but main had no feature scenario checking them.
+This branch adds scenarios 02_4 / 02_5 to the real createSession feature; tests assert the fixed branch.
+test_baseline_* are informational checks of the unfixed main (git origin/main)."""
 import pathlib, re, pytest, jsonschema, glob
 from gherkin.parser import Parser
-from conftest import TD
+from conftest import TD, unfixed_text
 
 HERE = pathlib.Path(__file__).parent
 ALL = "\n".join(p.read_text() for p in sorted(TD.glob("*.feature")))
@@ -18,26 +19,50 @@ def test_examples_exist_for_both_events(oas):
     txt = str(oas)
     assert "DURATION_EXPIRED" in txt and "NETWORK_TERMINATED" in txt
 
-def test_current_features_cover_only_delete_requested():
+CF = "code/Test_definitions/quality-on-demand-createSession.feature"
+TAG4 = "quality_on_demand_createSession_02_4_event_duration_expired"
+TAG5 = "quality_on_demand_createSession_02_5_event_network_terminated"
+
+def test_baseline_unfixed_main_covers_only_delete_requested():
+    """baseline-unfixed (informational): on main only DELETE_REQUESTED had an event scenario."""
+    txt = "\n".join(unfixed_text("code/Test_definitions/" + p.name) for p in sorted(TD.glob("*.feature")))
+    covered = {s for s in ("DURATION_EXPIRED", "NETWORK_TERMINATED", "DELETE_REQUESTED") if f'"$.data.statusInfo" is "{s}"' in txt}
+    assert covered == {"DELETE_REQUESTED"}
+
+def test_fixed_all_statusinfo_values_covered_by_features():
     covered = {s for s in ("DURATION_EXPIRED", "NETWORK_TERMINATED", "DELETE_REQUESTED") if f'"$.data.statusInfo" is "{s}"' in ALL}
-    assert covered == {"DELETE_REQUESTED"}, f"documents current state: {covered}"
+    assert covered == {"DURATION_EXPIRED", "NETWORK_TERMINATED", "DELETE_REQUESTED"}
 
-@pytest.mark.xfail(strict=True, reason="gap: no scenario for DURATION_EXPIRED on main")
-def test_gap_duration_expired_scenario_exists():
-    assert '"$.data.statusInfo" is "DURATION_EXPIRED"' in ALL
+def test_fixed_duration_expired_scenario_in_real_feature(create_feature):
+    from conftest import scenario_block
+    blk = scenario_block(create_feature, TAG4)
+    assert '"$.data.qosStatus" is "UNAVAILABLE"' in blk and '"$.data.statusInfo" is "DURATION_EXPIRED"' in blk
 
-@pytest.mark.xfail(strict=True, reason="gap: no scenario for NETWORK_TERMINATED on main")
-def test_gap_network_terminated_scenario_exists():
-    assert '"$.data.statusInfo" is "NETWORK_TERMINATED"' in ALL
+def test_fixed_network_terminated_scenario_in_real_feature(create_feature):
+    from conftest import scenario_block
+    blk = scenario_block(create_feature, TAG5)
+    assert '"$.data.statusInfo" is "NETWORK_TERMINATED"' in blk and "EventQosStatusChanged" in blk
+
+def test_fixed_real_feature_parses_and_tags_unique(create_feature):
+    Parser().parse(create_feature)
+    tags = re.findall(r"^\s*@(\S+)", create_feature, re.M)
+    assert len(tags) == len(set(tags)), "duplicate tags"
+    assert TAG4 in tags and TAG5 in tags
+
+def test_fixed_new_scenarios_do_not_touch_existing_ones(create_feature):
+    base = unfixed_text(CF)
+    for t in re.findall(r"^\s*@(\S+)", base, re.M):
+        assert f"@{t}" in create_feature, t
+    assert create_feature.count("Scenario") == base.count("Scenario") + 2
 
 def test_proposed_feature_parses_and_covers_gap():
     t = (HERE / "proposed_events.feature").read_text()
     Parser().parse(t)
     assert '"$.data.statusInfo" is "DURATION_EXPIRED"' in t and '"$.data.statusInfo" is "NETWORK_TERMINATED"' in t
 
-def test_proposed_tags_do_not_collide_with_existing():
+def test_proposed_tags_do_not_collide_with_baseline_main():
     new = re.findall(r"@(\S+)", (HERE / "proposed_events.feature").read_text())
-    old = set(re.findall(r"@(\S+)", ALL))
+    old = set(re.findall(r"@(\S+)", unfixed_text(CF)))
     assert new and not (set(new) & old), set(new) & old
 
 def test_proposed_tags_follow_naming_pattern():
