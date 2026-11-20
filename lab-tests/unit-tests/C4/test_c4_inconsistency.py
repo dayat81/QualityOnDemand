@@ -1,11 +1,11 @@
 """C4: _06 (200 []) and C01.07 (422 SERVICE_NOT_APPLICABLE) use the same device precondition but expect different outcomes.
 Fixture-based: a reference implementation whose behaviour depends ONLY on what the Gherkin text says about the device.
-Tests marked 'gap' are EXPECTED TO FAIL on unfixed main (strict xfail)."""
+The fix belongs in camaraproject/QoSProfiles (not in this fork): the tests assert the PROPOSED revision (proposed/) and keep
+documented 'baseline-unfixed (informational)' checks that the upstream file (fixtures/, @954b773) is still ambiguous."""
 import itertools, pathlib, re, pytest
 from gherkin.parser import Parser
-from conftest import FEATURE
+from conftest import UPSTREAM, PROPOSED
 
-HERE = pathlib.Path(__file__).parent
 
 def scenarios(path_or_text):
     text = path_or_text.read_text() if hasattr(path_or_text, "read_text") else path_or_text
@@ -33,20 +33,20 @@ S06 = "qos_profiles_retrieveQosProfiles_06_device_qos_profiles_not_found"
 S07 = "qos_profiles_retrieveQosProfiles_C01.07_device_not_supported"
 
 @pytest.fixture(scope="module")
-def main_sc(): return scenarios(FEATURE)
+def main_sc(): return scenarios(UPSTREAM)
 
-def test_both_scenarios_exist(main_sc):
+def test_baseline_upstream_both_scenarios_exist(main_sc):
     assert S06 in main_sc and S07 in main_sc
 
-def test_expected_outcomes_differ(main_sc):
+def test_baseline_upstream_expected_outcomes_differ(main_sc):
     assert outcome(main_sc[S06]) == (200, "[]")
     assert outcome(main_sc[S07]) == (422, "error")
 
-def test_device_precondition_is_the_same_on_main(main_sc):
+def test_baseline_unfixed_upstream_device_precondition_is_the_same(main_sc):
     """Documents the issue: both preconditions classify the device as 'service not applicable'."""
     assert device_is_not_applicable(main_sc[S06]) and device_is_not_applicable(main_sc[S07])
 
-def test_no_reference_implementation_satisfies_both_literally(main_sc):
+def test_baseline_unfixed_upstream_no_reference_implementation_satisfies_both_literally(main_sc):
     """Any server whose response is a function of the single classification 'service not applicable' returns one outcome for it."""
     states = {device_is_not_applicable(main_sc[S06]), device_is_not_applicable(main_sc[S07])}
     assert states == {True}                              # only one device state is described
@@ -56,13 +56,27 @@ def test_no_reference_implementation_satisfies_both_literally(main_sc):
           if all(o in v for v in wanted.values()) and len(wanted[True]) == 1]
     assert ok == []                                      # none: the two expectations are disjoint
 
-@pytest.mark.xfail(strict=True, reason="gap: on main the two device preconditions are distinguishable only by a per-device switch not in the text")
-def test_gap_preconditions_are_distinguishable_on_main(main_sc):
-    assert device_phrase(main_sc[S06]) != device_phrase(main_sc[S07])
-    assert device_is_not_applicable(main_sc[S06]) != device_is_not_applicable(main_sc[S07])
+def test_baseline_unfixed_upstream_preconditions_not_distinguishable_by_text(main_sc):
+    """baseline-unfixed (informational): documents that upstream still cannot tell the two devices apart from the text."""
+    assert device_phrase(main_sc[S06]) == device_phrase(main_sc[S07]) or \
+        device_is_not_applicable(main_sc[S06]) == device_is_not_applicable(main_sc[S07])
+
+def test_proposed_preconditions_are_distinguishable_by_text():
+    p = scenarios(PROPOSED)
+    assert device_phrase(p[S06]) != device_phrase(p[S07])
+    assert device_is_not_applicable(p[S06]) != device_is_not_applicable(p[S07])
+
+def test_proposed_changes_only_scenario_06():
+    u, p = scenarios(UPSTREAM), scenarios(PROPOSED)
+    assert set(u) == set(p)
+    assert [t for t in u if u[t] != p[t]] == [S06]
+
+def test_proposed_file_parses_and_scenario_count_unchanged():
+    Parser().parse(PROPOSED.read_text())
+    assert PROPOSED.read_text().count("Scenario") == UPSTREAM.read_text().count("Scenario")
 
 def test_proposed_feature_resolves_conflict():
-    p = scenarios(HERE / "proposed_06_C01_07.feature")
+    p = scenarios(PROPOSED)
     assert outcome(p[S06]) == (200, "[]") and outcome(p[S07]) == (422, "error")
     assert device_is_not_applicable(p[S06]) is False and device_is_not_applicable(p[S07]) is True
     assert any("no QoS Profile is associated" in s for s in p[S06])
@@ -75,7 +89,7 @@ class RefServer:
         return (200, "[]") if not self.profiles else (200, "non-empty")
 
 def test_ref_server_satisfies_proposed_with_two_flags():
-    p = scenarios(HERE / "proposed_06_C01_07.feature")
+    p = scenarios(PROPOSED)
     assert RefServer(service=True, profiles=False).retrieve() == outcome(p[S06])
     assert RefServer(service=False).retrieve() == outcome(p[S07])
 
@@ -83,7 +97,7 @@ def test_regression_normal_device_gets_profiles():
     assert RefServer().retrieve() == (200, "non-empty")
 
 def test_negative_single_flag_server_cannot_satisfy_proposed():
-    p = scenarios(HERE / "proposed_06_C01_07.feature")
+    p = scenarios(PROPOSED)
     for flag in itertools.product([True, False], repeat=1):
         srv = RefServer(service=flag[0], profiles=flag[0])   # one switch only
         got = srv.retrieve()

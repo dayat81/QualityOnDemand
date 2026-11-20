@@ -1,4 +1,15 @@
-....x....                                                                [100%]
-=========================== short test summary info ============================
-XFAIL test_c4_inconsistency.py::test_gap_preconditions_are_distinguishable_on_main - gap: on main the two device preconditions are distinguishable only by a per-device switch not in the text
-8 passed, 1 xfailed in 0.02s
+# C4 unit test result (box, 2026-11-20 15:31 WIB)
+# cmd: pytest -q -rA
+PASSED test_c4_inconsistency.py::test_baseline_upstream_both_scenarios_exist
+PASSED test_c4_inconsistency.py::test_baseline_upstream_expected_outcomes_differ
+PASSED test_c4_inconsistency.py::test_baseline_unfixed_upstream_device_precondition_is_the_same
+PASSED test_c4_inconsistency.py::test_baseline_unfixed_upstream_no_reference_implementation_satisfies_both_literally
+PASSED test_c4_inconsistency.py::test_baseline_unfixed_upstream_preconditions_not_distinguishable_by_text
+PASSED test_c4_inconsistency.py::test_proposed_preconditions_are_distinguishable_by_text
+PASSED test_c4_inconsistency.py::test_proposed_changes_only_scenario_06
+PASSED test_c4_inconsistency.py::test_proposed_file_parses_and_scenario_count_unchanged
+PASSED test_c4_inconsistency.py::test_proposed_feature_resolves_conflict
+PASSED test_c4_inconsistency.py::test_ref_server_satisfies_proposed_with_two_flags
+PASSED test_c4_inconsistency.py::test_regression_normal_device_gets_profiles
+PASSED test_c4_inconsistency.py::test_negative_single_flag_server_cannot_satisfy_proposed
+12 passed in 0.04s
